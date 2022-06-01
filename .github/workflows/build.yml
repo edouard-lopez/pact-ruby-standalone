@@ -4,13 +4,18 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'windows-latest','macos-latest']
+        ruby-version: [2.2.10]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
 
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.2.10
+        ruby-version: ${{ matrix.ruby-version }}
 
     - name: Set up environment
       run: bundle install
